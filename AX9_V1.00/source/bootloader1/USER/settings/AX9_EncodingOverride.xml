@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<userOverrides>
+    <override>
+        <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\BSP\emc2305.c</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
+        <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\BSP\xmodem.c</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
+        <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\BSP\xmodem.c</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
+        <path>C:\Users\LIANMENG\Desktop\BOOT\BSP\flash.c</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
+        <path>C:\Users\LIANMENG\Desktop\BOOT\BSP\xmodem.c</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
+        <path>C:\Users\LIANMENG\Desktop\bootloader\BSP\xmodem.c</path>
+        <encoding>System</encoding>
+    </override>
+</userOverrides>
