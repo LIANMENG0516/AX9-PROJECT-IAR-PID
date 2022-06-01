@@ -6,11 +6,11 @@
 
 "-p" 
 
-"D:\Program Files\IAR Systems\Embedded Workbench 9.0\arm\CONFIG\debugger\ST\STM32F407ZG.ddf" 
+"D:\Program Files\IAR Systems\Embedded Workbench 9.0\arm\CONFIG\debugger\ST\STM32F405ZG.ddf" 
 
 "--semihosting" 
 
-"--device=STM32F407ZG" 
+"--device=STM32F405ZG" 
 
 "--drv_communication=USB0" 
 

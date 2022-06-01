@@ -25,6 +25,8 @@ typedef enum {FALSE = 0, TRUE = !FALSE} bool;
 
 typedef struct
 {    
+    bool DebugMessage;    //调试信息开关
+  
     bool HvFlag;
     bool CwFlag;
 
@@ -114,12 +116,16 @@ typedef struct
 
 typedef struct
 {    
+    bool    DebugMessage;                                            //调试信息开关
+    
     uint8_t FPGA;
     uint8_t MCU;
 }SysTemper;
 
 typedef struct
 {    
+    bool     DebugMessage;                                                   //调试信息开关
+    
     uint16_t Rpm1;
     uint16_t Rpm2;
     uint16_t Rpm3;
@@ -129,6 +135,8 @@ typedef struct
 
 typedef struct
 {    
+    bool            DebugMessage;                                            //调试信息开关
+    
     bool            Timeout;
     bool            HV_Send;
     bool            CW_Send;
@@ -149,15 +157,17 @@ typedef struct
 
 typedef struct
 {    
+    bool            DebugMessage;          //调试信息开关    
+    
     bool            Ac_Insert;
     bool            Bat1_Insert;
     bool            Bat2_Insert;
-    uint8_t         Bat1_Power;             //电池电量
-    uint8_t         Bat2_Power;             //电池电量
-    uint8_t         Bat1_Tempature;         //电池温度
-    uint8_t         Bat2_Tempature;         //电池温度
-    uint8_t         Bat1_State;             //电池故障标志
-    uint8_t         Bat2_State;             //电池故障标志
+    uint8_t         Bat1_Power;                 //电池电量
+    uint8_t         Bat2_Power;                 //电池电量
+    uint8_t         Bat1_Tempature;             //电池温度
+    uint8_t         Bat2_Tempature;             //电池温度
+    uint8_t         Bat1_State;                 //电池故障标志
+    uint8_t         Bat2_State;                 //电池故障标志
     
 }PwrInfoStruct;
 
@@ -176,6 +186,8 @@ typedef struct
     bool            System_S4_Change;
     bool            S3_State;
     bool            S4_State;
+    
+    bool            DebugMessage;            //调试信息开关
 }System_MsgStruct;
 
 void Delay_Nop(uint16_t count);

@@ -45,7 +45,7 @@ void Gpio_Config()
     
     //USB_CTRL
     Gpio_Init(USB_CTRL_PORT, USB_CTRL_PIN, GPIO_Mode_OUT, GPIO_OType_PP, GPIO_PuPd_NOPULL);
-    USB_CTRL_EN(0);                                             //初始化禁止USB插入, 防止电流导管
+    USB_CTRL_EN(0);                                             //初始化禁止USB插入, 防止电流倒灌
 
     //SPI3_CS3  
     Gpio_Init(SPI3_CS3_PORT, SPI3_CS3_PIN, GPIO_Mode_OUT, GPIO_OType_PP, GPIO_PuPd_UP);    
@@ -259,10 +259,12 @@ void Gpio_Config()
 
     //BAT1_C_SHIFT
     Gpio_Init(BAT1_C_SHIFT_PORT, BAT1_C_SHIFT_PIN, GPIO_Mode_OUT, GPIO_OType_PP, GPIO_PuPd_NOPULL);
-
+    BAT1_C_SHIFT_EN(0);
+    
     //BAT2_C_SHIFT
     Gpio_Init(BAT2_C_SHIFT_PORT, BAT2_C_SHIFT_PIN, GPIO_Mode_OUT, GPIO_OType_PP, GPIO_PuPd_NOPULL);
-
+    BAT2_C_SHIFT_EN(0);
+    
     //CHARGE_LED_O
     Gpio_Init(CHARGE_LED_O_PORT, CHARGE_LED_O_PIN, GPIO_Mode_OUT, GPIO_OType_PP, GPIO_PuPd_NOPULL);
 

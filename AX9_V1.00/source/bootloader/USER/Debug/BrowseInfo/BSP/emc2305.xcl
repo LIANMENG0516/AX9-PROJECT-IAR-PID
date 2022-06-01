@@ -1,31 +1,35 @@
-"C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\BSP\emc2305.c"
+"C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\BSP\emc2305.c"
 -std=c11
 -ferror-limit=0
 -fbracket-depth=512
 -funsigned-char
 -MD
 -MF
-C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\USER\Debug\BrowseInfo\BSP\emc2305.pbi.dep
+C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\USER\Debug\BrowseInfo\BSP\emc2305.pbi.dep
 -o
-C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\USER\Debug\BrowseInfo\BSP\emc2305.pbi
+C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\USER\Debug\BrowseInfo\BSP\emc2305.pbi
 -I
-C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\BSP
+C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\BSP
 -I
-C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\USER\..\BSP
+C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\USER\..\BSP
 -I
-C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\USER\..\CMSIS
+C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\USER\..\CMSIS
 -I
-C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\USER\..\FWLIB\inc
+C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\USER\..\FWLIB\inc
 -I
-C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\USER
+C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\USER
 -I
-C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\USER\..\USB\USB_APP
+C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\USER\..\USB\USB_APP
 -I
-C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\USER\..\USB\STM32_USB_OTG_Driver\inc
+C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\USER\..\USB\STM32_USB_OTG_Driver\inc
 -I
-C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\USER\..\USB\STM32_USB_Device_Library\Core\inc
+C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\USER\..\USB\STM32_USB_Device_Library\Core\inc
 -I
-C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\USER\..\USB\STM32_USB_Device_Library\Class\cdc\inc
+C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\USER\..\USB\STM32_USB_Device_Library\Class\cdc\inc
+-I
+D:\Program Files\IAR Systems\Embedded Workbench 9.0\arm\CMSIS\Core\Include\
+-I
+D:\Program Files\IAR Systems\Embedded Workbench 9.0\arm\CMSIS\DSP\Include\
 -I
 D:\Program Files\IAR Systems\Embedded Workbench 9.0\arm\inc\c\aarch32
 -I
@@ -33,21 +37,25 @@ D:\Program Files\IAR Systems\Embedded Workbench 9.0\arm\inc
 -I
 D:\Program Files\IAR Systems\Embedded Workbench 9.0\arm\inc\c
 -I
-C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\BSP
+C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\BSP
 -I
-C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\CMSIS
+C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\CMSIS
 -I
-C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\FWLIB\inc
+C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\FWLIB\inc
 -I
-C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\USER
+C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\USER
 -I
-C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\USB\USB_APP
+C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\USB\USB_APP
 -I
-C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\USB\STM32_USB_OTG_Driver\inc
+C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\USB\STM32_USB_OTG_Driver\inc
 -I
-C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\USB\STM32_USB_Device_Library\Core\inc
+C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\USB\STM32_USB_Device_Library\Core\inc
 -I
-C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\USB\STM32_USB_Device_Library\Class\cdc\inc
+C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\USB\STM32_USB_Device_Library\Class\cdc\inc
+-I
+D:\Program Files\IAR Systems\Embedded Workbench 9.0\arm\CMSIS\Core\Include
+-I
+D:\Program Files\IAR Systems\Embedded Workbench 9.0\arm\CMSIS\DSP\Include
 -D__CHAR_BITS__=8
 -D__CHAR_MAX__=0xff
 -D__CHAR_MIN__=0

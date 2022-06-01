@@ -173,30 +173,46 @@ void Cmd_EcInfo()
 
 void Cmd_ReadFirmWareVersion()
 {
-    SenFrameCmd.Cid = CMD_FIRMWARE_VERSION;
-    SenFrameCmd.Len = 2;
-    SenFrameCmd.Data[0] = FirmwareVersion_H;
-    SenFrameCmd.Data[1] = FirmwareVersion_L;
-    
-    if(SysMsg.Cmd.Channel == ECCOM_CHANNEL)
+    if(RcvFrameCmd.Data[0] == 0x1B)                                             //兼容LX9 Super的版本查询返回的命令
     {
-        FrameCmdPackage(CommuComTX.Data);
-        Send_CmdPackage(COMMU_COM_DMAY_STREAMX_TX);
+        USB_Tx_Buffer[0] = SenFrameCmd.Header   = 0x68;
+        USB_Tx_Buffer[1] = SenFrameCmd.Id       = 0x04;
+        USB_Tx_Buffer[2] = SenFrameCmd.Cid      = 0x05;
+        USB_Tx_Buffer[3] = SenFrameCmd.Len      = 0x04;
+        USB_Tx_Buffer[4] = SenFrameCmd.Data[0]  = 0x1B;
+        USB_Tx_Buffer[5] = SenFrameCmd.Data[1]  = FirmwareVersion_H;
+        USB_Tx_Buffer[6] = SenFrameCmd.Data[2]  = FirmwareVersion_L;
+        USB_Tx_Buffer[7] = SenFrameCmd.Chk      = USB_Tx_Buffer[1] + USB_Tx_Buffer[2] + USB_Tx_Buffer[3] + USB_Tx_Buffer[4] + USB_Tx_Buffer[5] + USB_Tx_Buffer[6];
+        USB_Tx_Buffer[8] = SenFrameCmd.Tail     = 0x16;
+        VCP_fops.pIf_DataTx(USB_Tx_Buffer, 9);
     }
-    
-    if(SysMsg.Cmd.Channel == USB_CHANNEL)
+    else
     {
-        FrameCmdPackage(USB_Tx_Buffer);
-        VCP_fops.pIf_DataTx(USB_Tx_Buffer, (USB_Tx_Buffer[3] + 6));
-    }
-    
-    if(SysMsg.Cmd.Channel == DEBUGCOM_CHANNEL)
-    {
-        #if DEBUG_COMMAND
-        FrameCmdPackage(DebugComTX.Data);
-        Send_CmdPackage(DEBUG_COM_DMAY_STREAMX_TX);
-        #endif
-    }
+        SenFrameCmd.Cid = CMD_FIRMWARE_VERSION;
+        SenFrameCmd.Len = 2;
+        SenFrameCmd.Data[0] = FirmwareVersion_H;
+        SenFrameCmd.Data[1] = FirmwareVersion_L;
+        
+        if(SysMsg.Cmd.Channel == ECCOM_CHANNEL)
+        {
+            FrameCmdPackage(CommuComTX.Data);
+            Send_CmdPackage(COMMU_COM_DMAY_STREAMX_TX);
+        }
+        
+        if(SysMsg.Cmd.Channel == USB_CHANNEL)
+        {
+            FrameCmdPackage(USB_Tx_Buffer);
+            VCP_fops.pIf_DataTx(USB_Tx_Buffer, (USB_Tx_Buffer[3] + 6));
+        }
+        
+        if(SysMsg.Cmd.Channel == DEBUGCOM_CHANNEL)
+        {
+            #if DEBUG_COMMAND
+            FrameCmdPackage(DebugComTX.Data);
+            Send_CmdPackage(DEBUG_COM_DMAY_STREAMX_TX);
+            #endif
+        }
+    } 
 }
 
 void Cmd_ReadCompileInfo()
@@ -376,33 +392,49 @@ void Reset_Cpu()
 
 void Cmd_Upgrade()
 {
-    SenFrameCmd.Cid = CMD_UPGRADE;
-    SenFrameCmd.Len = 1;
-    SenFrameCmd.Data[0] = RESPONSE_OK;
-    
-    if(SysMsg.Cmd.Channel == ECCOM_CHANNEL)
+    if(RcvFrameCmd.Data[0] == 0x1D)                                             //兼容LX9 Super的固件升级返回的命令
     {
-        FrameCmdPackage(CommuComTX.Data);
-        Send_CmdPackage(COMMU_COM_DMAY_STREAMX_TX); 
+        USB_Tx_Buffer[0] = SenFrameCmd.Header   = 0x68;
+        USB_Tx_Buffer[1] = SenFrameCmd.Id       = 0x04;
+        USB_Tx_Buffer[2] = SenFrameCmd.Cid      = 0x06;
+        USB_Tx_Buffer[3] = SenFrameCmd.Len      = 0x02;
+        USB_Tx_Buffer[4] = SenFrameCmd.Data[0]  = 0x1E;
+        USB_Tx_Buffer[5] = SenFrameCmd.Chk      = USB_Tx_Buffer[1] + USB_Tx_Buffer[2] + USB_Tx_Buffer[3] + USB_Tx_Buffer[4];
+        USB_Tx_Buffer[6] = SenFrameCmd.Tail     = 0x16;
+        VCP_fops.pIf_DataTx(USB_Tx_Buffer, 7);
     }
-    
-    if(SysMsg.Cmd.Channel == USB_CHANNEL)
+    else
     {
-        FrameCmdPackage(USB_Tx_Buffer);
-        VCP_fops.pIf_DataTx(USB_Tx_Buffer, (USB_Tx_Buffer[3] + 6));
-    }
-    
-    if(SysMsg.Cmd.Channel == DEBUGCOM_CHANNEL)
-    {
-        #if DEBUG_COMMAND
-        FrameCmdPackage(DebugComTX.Data);
-        Send_CmdPackage(DEBUG_COM_DMAY_STREAMX_TX);
-        #endif
+        SenFrameCmd.Cid = CMD_UPGRADE;
+        SenFrameCmd.Len = 1;
+        SenFrameCmd.Data[0] = RESPONSE_OK;
+
+        if(SysMsg.Cmd.Channel == ECCOM_CHANNEL)
+        {
+            FrameCmdPackage(CommuComTX.Data);
+            Send_CmdPackage(COMMU_COM_DMAY_STREAMX_TX); 
+        }
+        
+        if(SysMsg.Cmd.Channel == USB_CHANNEL)
+        {
+            FrameCmdPackage(USB_Tx_Buffer);
+            VCP_fops.pIf_DataTx(USB_Tx_Buffer, (USB_Tx_Buffer[3] + 6));
+        }
+        
+        if(SysMsg.Cmd.Channel == DEBUGCOM_CHANNEL)
+        {
+            #if DEBUG_COMMAND
+            FrameCmdPackage(DebugComTX.Data);
+            Send_CmdPackage(DEBUG_COM_DMAY_STREAMX_TX);
+            #endif
+        }
     }
 
     FLASH_Unlock();
     FLASH_ProgramWord(SIGN_AREA_ADDR, 0xAAAABBBB);
     FLASH_Lock();
+    
+    Delay_ms(200);
 
     Reset_Cpu();
 }
@@ -766,6 +798,22 @@ void Cmd_InValidData()
     }
 }
 
+void Cmd_DebugMessageWwitch()
+{
+    if(RcvFrameCmd.Data[0] & 0x01)      SysMsg.AdjVol.DebugMessage = TRUE;
+    else                                SysMsg.AdjVol.DebugMessage = FALSE;
+    if(RcvFrameCmd.Data[0] & 0x02)      SysMsg.PwrInfo.DebugMessage = TRUE;
+    else                                SysMsg.PwrInfo.DebugMessage = FALSE;
+    if(RcvFrameCmd.Data[0] & 0x04)      SysMsg.Temperature.DebugMessage = TRUE; 
+    else                                SysMsg.Temperature.DebugMessage = FALSE;
+    if(RcvFrameCmd.Data[0] & 0x08)      SysMsg.Fan.DebugMessage = TRUE;
+    else                                SysMsg.Fan.DebugMessage = FALSE;
+    if(RcvFrameCmd.Data[0] & 0x10)      SysMsg.Cmd.DebugMessage = TRUE;
+    else                                SysMsg.Cmd.DebugMessage = FALSE;
+    if(RcvFrameCmd.Data[0] & 0x20)      SysMsg.DebugMessage = TRUE;
+    else                                SysMsg.DebugMessage = FALSE;
+}
+
 
 void FrameCmdPackage(uint8_t *pBuf)	//数据打包
 {
@@ -812,7 +860,6 @@ ErrorStatus ReceiveFrameAnalysis(uint8_t *pData, uint8_t DataLen)
     RcvFrameCmd.Chk 		= 	*pData++;
     RcvFrameCmd.Tail 		= 	*pData;
     
-    
     CmdCrc += RcvFrameCmd.Id;
     CmdCrc += RcvFrameCmd.Cid;
     CmdCrc += RcvFrameCmd.Len;
@@ -820,6 +867,18 @@ ErrorStatus ReceiveFrameAnalysis(uint8_t *pData, uint8_t DataLen)
     for(int i=0; i<RcvFrameCmd.Len; i++)
     {
         CmdCrc += RcvFrameCmd.Data[i];
+    }
+    
+    if(RcvFrameCmd.Header == 0x68 && RcvFrameCmd.Id == 0x04 && RcvFrameCmd.Cid == 0x03 && RcvFrameCmd.Len == 0x02)
+    {
+        if(RcvFrameCmd.Data[0] == 0x1B)                                         //兼容LX9 Super的版本查询命令
+        {
+            return SUCCESS;
+        }
+        if(RcvFrameCmd.Data[0] == 0x1D)                                         //兼容LX9 Super的固件升级命令
+        {
+            return SUCCESS;
+        }
     }
     
     if(RcvFrameCmd.Header == 0x68 && RcvFrameCmd.Id == 0x04 && RcvFrameCmd.Tail == 0x16 && CmdCrc == RcvFrameCmd.Chk)
@@ -841,7 +900,12 @@ ErrorStatus ReceiveFrameAnalysis(uint8_t *pData, uint8_t DataLen)
 }
 
 void Cmd_Process()
-{
+{       
+    if(RcvFrameCmd.Cid == 0x03)
+    {
+        if(RcvFrameCmd.Data[0] == 0x1B) RcvFrameCmd.Cid = 0x01;                 //兼容LX9 Super的版本查询命令
+        if(RcvFrameCmd.Data[0] == 0x1D) RcvFrameCmd.Cid = 0x08;                 //兼容LX9 Super的固件升级命令
+    }
     switch(RcvFrameCmd.Cid)
     {
         case    CMD_EC_COMMUNICATE:             Cmd_EcInfo();                   break;
@@ -889,6 +953,9 @@ void Cmd_Process()
                 
                 Cmd_AdjustVoltageCw();
                 break;
+                
+                
+        case    CMS_DEBUGSWITCH:                Cmd_DebugMessageWwitch();       break;
 
         default:
                 Cmd_InValidData();

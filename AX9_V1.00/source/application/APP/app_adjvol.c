@@ -159,17 +159,17 @@ void Get_AdjHvMsg(uint8_t *buffer)
             if((SysMsg.AdjVol.T_VPP1 > SysMsg.AdjVol.Old_T_VPP1 && SysMsg.AdjVol.T_VNN1 > SysMsg.AdjVol.Old_T_VNN1) ||         //升降压判断           
                (SysMsg.AdjVol.T_VPP2 > SysMsg.AdjVol.Old_T_VPP2 && SysMsg.AdjVol.T_VNN2 > SysMsg.AdjVol.Old_T_VNN2)  )
             {
-                DEBUG_PRINTF(1, "Up Vol \r\n");            
+                DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "Up Vol \r\n");            
                 SysMsg.AdjVol.TimeOut = HV_CHANGE_UP_TIMEOUT;                                                                    //本次调压为升压
             }
             else if((SysMsg.AdjVol.T_VPP1 == SysMsg.AdjVol.Old_T_VPP1 && SysMsg.AdjVol.T_VNN1 == SysMsg.AdjVol.Old_T_VNN1) ||         //升降压判断           
                     (SysMsg.AdjVol.T_VPP2 == SysMsg.AdjVol.Old_T_VPP2 && SysMsg.AdjVol.T_VNN2 == SysMsg.AdjVol.Old_T_VNN2)  )
             {
-                DEBUG_PRINTF(1, "Equal Vol \r\n");            
+                DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "Equal Vol \r\n");            
             }
             else
             {
-                DEBUG_PRINTF(1, "Down Vol \r\n");
+                DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "Down Vol \r\n");
                 SysMsg.AdjVol.TimeOut = HV_CHANGE_DOWN_TIMEOUT;                                                                  //本次调压为降压
             }
             
@@ -187,7 +187,7 @@ void Get_AdjHvMsg(uint8_t *buffer)
             SysMsg.AdjVol.P_McuDacHv2 = SysMsg.AdjVol.T_McuDacHv2 = Vpp_Calculate_AdjVol(SysMsg.AdjVol.T_VPP2);                
             SysMsg.AdjVol.P_SpiDacHv2 = SysMsg.AdjVol.T_SpiDacHv2 = Vnn_Calculate_AdjVol(SysMsg.AdjVol.T_VNN2);
         
-            DEBUG_PRINTF(0, "DacVol Target : %d %d %d %d \r\n", SysMsg.AdjVol.T_McuDacHv1, SysMsg.AdjVol.T_SpiDacHv1, SysMsg.AdjVol.T_McuDacHv2, SysMsg.AdjVol.T_SpiDacHv2); 
+            DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "DacVol Target : %d %d %d %d \r\n", SysMsg.AdjVol.T_McuDacHv1, SysMsg.AdjVol.T_SpiDacHv1, SysMsg.AdjVol.T_McuDacHv2, SysMsg.AdjVol.T_SpiDacHv2); 
         
             while(SysMsg.AdjVol.HV1NeedChange == TRUE || SysMsg.AdjVol.HV2NeedChange == TRUE)
             {
@@ -223,13 +223,13 @@ void Get_AdjHvMsg(uint8_t *buffer)
                     }
                 }
                 
-                DEBUG_PRINTF(0, "DacVol Precent : %d %d %d %d \r\n", SysMsg.AdjVol.P_McuDacHv1, SysMsg.AdjVol.P_SpiDacHv1, SysMsg.AdjVol.P_McuDacHv2, SysMsg.AdjVol.P_SpiDacHv2);  
+                DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "DacVol Precent : %d %d %d %d \r\n", SysMsg.AdjVol.P_McuDacHv1, SysMsg.AdjVol.P_SpiDacHv1, SysMsg.AdjVol.P_McuDacHv2, SysMsg.AdjVol.P_SpiDacHv2);  
             }       
             
             #else
             
             Adjust_Voltage_HV();                                                //执行高压调压处理, 该调压处理为硬件一次性调压
-            DEBUG_PRINTF(1, "DacVol Target : %d %d %d %d \r\n", SysMsg.AdjVol.T_McuDacHv1, SysMsg.AdjVol.T_SpiDacHv1, SysMsg.AdjVol.T_McuDacHv2, SysMsg.AdjVol.T_SpiDacHv2); 
+            DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "DacVol Target : %d %d %d %d \r\n", SysMsg.AdjVol.T_McuDacHv1, SysMsg.AdjVol.T_SpiDacHv1, SysMsg.AdjVol.T_McuDacHv2, SysMsg.AdjVol.T_SpiDacHv2); 
 
             #endif
         
@@ -288,17 +288,17 @@ void Get_AdjCwMsg(uint8_t *buffer)
             if((SysMsg.AdjVol.T_VPP1 > SysMsg.AdjVol.Old_T_VPP1 && SysMsg.AdjVol.T_VNN1 > SysMsg.AdjVol.Old_T_VNN1) ||           //升降压判断           
                (SysMsg.AdjVol.T_VPP2 > SysMsg.AdjVol.Old_T_VPP2 && SysMsg.AdjVol.T_VNN2 > SysMsg.AdjVol.Old_T_VNN2) )
             {
-                DEBUG_PRINTF(1, "Up Vol \r\n");            
+                DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "Up Vol \r\n");            
                 SysMsg.AdjVol.TimeOut = HV_CHANGE_UP_TIMEOUT;                                                                    //本次调压为升压
             }
             else if(SysMsg.AdjVol.T_VPP1 == SysMsg.AdjVol.Old_T_VPP1 && SysMsg.AdjVol.T_VNN1 == SysMsg.AdjVol.Old_T_VNN1 &&      //升降压判断           
                     SysMsg.AdjVol.T_VPP2 == SysMsg.AdjVol.Old_T_VPP2 && SysMsg.AdjVol.T_VNN2 == SysMsg.AdjVol.Old_T_VNN2 )
             {
-                DEBUG_PRINTF(1, "Equal Vol \r\n");            
+                DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "Equal Vol \r\n");            
             }
             else
             {
-                DEBUG_PRINTF(1, "Down Vol \r\n");
+                DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "Down Vol \r\n");
                 SysMsg.AdjVol.TimeOut = HV_CHANGE_DOWN_TIMEOUT;                                                                   //本次调压为降压
             }
             
@@ -318,7 +318,7 @@ void Get_AdjCwMsg(uint8_t *buffer)
         }
         
         Adjust_Voltage_CW();                                                    //执行低压调压处理
-        DEBUG_PRINTF(1, "DacVol Target : %d %d %d %d \r\n", SysMsg.AdjVol.T_McuDacHv1, SysMsg.AdjVol.T_SpiDacHv1, SysMsg.AdjVol.T_SpiDacPcw, SysMsg.AdjVol.T_SpiDacNcw);  
+        DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "DacVol Target : %d %d %d %d \r\n", SysMsg.AdjVol.T_McuDacHv1, SysMsg.AdjVol.T_SpiDacHv1, SysMsg.AdjVol.T_SpiDacPcw, SysMsg.AdjVol.T_SpiDacNcw);  
       
         SysMsg.AdjVol.AdjVolOpen = TRUE;                                        //调压开启
         SysMsg.AdjVol.VolMinitor = FALSE;        
@@ -344,8 +344,8 @@ void App_AdjVol_Task()
         {
             if(++SysMsg.AdjVol.MinAdjVolCnt >= 50)
             {
-                DEBUG_PRINTF(1, "MinAdjVol Finish \r\n");  
-                DEBUG_PRINTF(1, "MinAdjVol %d Times - SysMsg.AdjVol.Time = %d - MinAdjVol Finish : %d %d %d %d \r\n", SysMsg.AdjVol.MinAdjVolCnt, SysMsg.AdjVol.Time, SysMsg.AdjVol.R_VPP1, SysMsg.AdjVol.R_VNN1, SysMsg.AdjVol.R_VPP2, SysMsg.AdjVol.R_VNN2);            
+                DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "MinAdjVol Finish \r\n");  
+                DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "MinAdjVol %d Times - SysMsg.AdjVol.Time = %d - MinAdjVol Finish : %d %d %d %d \r\n", SysMsg.AdjVol.MinAdjVolCnt, SysMsg.AdjVol.Time, SysMsg.AdjVol.R_VPP1, SysMsg.AdjVol.R_VNN1, SysMsg.AdjVol.R_VPP2, SysMsg.AdjVol.R_VNN2);            
                 
                 SysMsg.AdjVol.Time = 0; 
                 SysMsg.AdjVol.TimeFlag = FALSE;                                 //关闭计时  
@@ -361,7 +361,7 @@ void App_AdjVol_Task()
                     
                     DesVol = SysMsg.AdjVol.R_VPP1 - SysMsg.AdjVol.T_VPP1;
                     
-                    DEBUG_PRINTF(1, "MinAdjVol DesVol = %d SysMsg.AdjVol.R_VPP1 = %d SysMsg.AdjVol.T_VPP1 = %d \r\n", DesVol, SysMsg.AdjVol.R_VPP1, SysMsg.AdjVol.T_VPP1);       
+                    DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "MinAdjVol DesVol = %d SysMsg.AdjVol.R_VPP1 = %d SysMsg.AdjVol.T_VPP1 = %d \r\n", DesVol, SysMsg.AdjVol.R_VPP1, SysMsg.AdjVol.T_VPP1);       
 
                     if(DesVol > 0)
                     {
@@ -414,7 +414,7 @@ void App_AdjVol_Task()
                     
                     DesVol = SysMsg.AdjVol.R_VNN1 - SysMsg.AdjVol.T_VNN1;
                     
-                    DEBUG_PRINTF(1, "MinAdjVol DesVol = %d SysMsg.AdjVol.R_VNN1 = %d SysMsg.AdjVol.T_VNN1 = %d \r\n", DesVol, SysMsg.AdjVol.R_VNN1, SysMsg.AdjVol.T_VNN1);       
+                    DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "MinAdjVol DesVol = %d SysMsg.AdjVol.R_VNN1 = %d SysMsg.AdjVol.T_VNN1 = %d \r\n", DesVol, SysMsg.AdjVol.R_VNN1, SysMsg.AdjVol.T_VNN1);       
 
                     if(DesVol > 0)
                     {
@@ -466,7 +466,7 @@ void App_AdjVol_Task()
                         
                         DesVol = SysMsg.AdjVol.R_VPP2 - SysMsg.AdjVol.T_VPP2;
                         
-                        DEBUG_PRINTF(1, "MinAdjVol DesVol = %d SysMsg.AdjVol.R_VPP2 = %d SysMsg.AdjVol.T_VPP2 = %d \r\n", DesVol, SysMsg.AdjVol.R_VPP2, SysMsg.AdjVol.T_VPP2);       
+                        DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "MinAdjVol DesVol = %d SysMsg.AdjVol.R_VPP2 = %d SysMsg.AdjVol.T_VPP2 = %d \r\n", DesVol, SysMsg.AdjVol.R_VPP2, SysMsg.AdjVol.T_VPP2);       
 
                         if(DesVol > 0)
                         {
@@ -519,7 +519,7 @@ void App_AdjVol_Task()
                         
                         DesVol = SysMsg.AdjVol.R_VNN2 - SysMsg.AdjVol.T_VNN2;
                         
-                        DEBUG_PRINTF(1, "MinAdjVol DesVol = %d SysMsg.AdjVol.R_VNN2 = %d SysMsg.AdjVol.T_VNN2 = %d \r\n", DesVol, SysMsg.AdjVol.R_VNN2, SysMsg.AdjVol.T_VNN2);       
+                        DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "MinAdjVol DesVol = %d SysMsg.AdjVol.R_VNN2 = %d SysMsg.AdjVol.T_VNN2 = %d \r\n", DesVol, SysMsg.AdjVol.R_VNN2, SysMsg.AdjVol.T_VNN2);       
 
                         
                         if(DesVol > 0)
@@ -564,7 +564,7 @@ void App_AdjVol_Task()
                         }
                     }
                     
-                    DEBUG_PRINTF(1, "MinAdjVol SysMsg.AdjVol.P_McuDacHv1 = %d SysMsg.AdjVol.P_SpiDacHv1 = %d SysMsg.AdjVol.P_McuDacHv2 = %d SysMsg.AdjVol.P_SpiDacHv2 = %d \r\n", SysMsg.AdjVol.P_McuDacHv1, SysMsg.AdjVol.P_SpiDacHv1, SysMsg.AdjVol.P_McuDacHv2, SysMsg.AdjVol.P_SpiDacHv2);       
+                    DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "MinAdjVol SysMsg.AdjVol.P_McuDacHv1 = %d SysMsg.AdjVol.P_SpiDacHv1 = %d SysMsg.AdjVol.P_McuDacHv2 = %d SysMsg.AdjVol.P_SpiDacHv2 = %d \r\n", SysMsg.AdjVol.P_McuDacHv1, SysMsg.AdjVol.P_SpiDacHv1, SysMsg.AdjVol.P_McuDacHv2, SysMsg.AdjVol.P_SpiDacHv2);       
                 }
                 
 #if MINICWVOL
@@ -633,11 +633,11 @@ void App_AdjVol_Task()
                    SysMsg.AdjVol.R_VNN2 >= SysMsg.AdjVol.MIN_VNN2 && SysMsg.AdjVol.R_VNN2 <= SysMsg.AdjVol.MAX_VNN2 )  
                 {
                     AdjVol_Result_Send();                                                       //上传电压 
-                    DEBUG_PRINTF(1, "MinAdjVol %d Times - SysMsg.AdjVol.Time = %d - MinAdjVol Success : %d %d %d %d \r\n", SysMsg.AdjVol.MinAdjVolCnt, SysMsg.AdjVol.Time, SysMsg.AdjVol.R_VPP1, SysMsg.AdjVol.R_VNN1, SysMsg.AdjVol.R_VPP2, SysMsg.AdjVol.R_VNN2);            
+                    DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "MinAdjVol %d Times - SysMsg.AdjVol.Time = %d - MinAdjVol Success : %d %d %d %d \r\n", SysMsg.AdjVol.MinAdjVolCnt, SysMsg.AdjVol.Time, SysMsg.AdjVol.R_VPP1, SysMsg.AdjVol.R_VNN1, SysMsg.AdjVol.R_VPP2, SysMsg.AdjVol.R_VNN2);            
                 }
                 else
                 {
-                    DEBUG_PRINTF(1, "MinAdjVol %d Times - SysMsg.AdjVol.Time = %d - MinAdjVol Fail : %d %d %d %d \r\n", SysMsg.AdjVol.MinAdjVolCnt, SysMsg.AdjVol.Time, SysMsg.AdjVol.R_VPP1, SysMsg.AdjVol.R_VNN1, SysMsg.AdjVol.R_VPP2, SysMsg.AdjVol.R_VNN2);            
+                    DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "MinAdjVol %d Times - SysMsg.AdjVol.Time = %d - MinAdjVol Fail : %d %d %d %d \r\n", SysMsg.AdjVol.MinAdjVolCnt, SysMsg.AdjVol.Time, SysMsg.AdjVol.R_VPP1, SysMsg.AdjVol.R_VNN1, SysMsg.AdjVol.R_VPP2, SysMsg.AdjVol.R_VNN2);            
                 }
             }
         }
@@ -649,14 +649,14 @@ void App_AdjVol_Task()
                SysMsg.AdjVol.R_VPP2 <= SysMsg.AdjVol.MIN_VPP2 || SysMsg.AdjVol.R_VPP2 >= SysMsg.AdjVol.MAX_VPP2 ||
                SysMsg.AdjVol.R_VNN2 <= SysMsg.AdjVol.MIN_VNN2 || SysMsg.AdjVol.R_VNN2 >= SysMsg.AdjVol.MAX_VNN2 ) 
             {
-                DEBUG_PRINTF(1, "Voltage output is out range : %d %d %d %d \r\n", SysMsg.AdjVol.R_VPP1, SysMsg.AdjVol.R_VNN1, SysMsg.AdjVol.R_VPP2, SysMsg.AdjVol.R_VNN2);            
+                DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "Voltage output is out range : %d %d %d %d \r\n", SysMsg.AdjVol.R_VPP1, SysMsg.AdjVol.R_VNN1, SysMsg.AdjVol.R_VPP2, SysMsg.AdjVol.R_VNN2);            
                 SysMsg.AdjVol.VolMinitor = FALSE;
 //                Adjust_Voltage_Close();
             }
             
             if(SysMsg.AdjVol.R_VPP1 < (SysMsg.AdjVol.R_VPP2 - 200) || SysMsg.AdjVol.R_VNN1 < (SysMsg.AdjVol.R_VNN2 - 200))
             {
-                DEBUG_PRINTF(1, "HV1 < HV2 : %d %d %d %d \r\n", SysMsg.AdjVol.R_VPP1, SysMsg.AdjVol.R_VNN1, SysMsg.AdjVol.R_VPP2, SysMsg.AdjVol.R_VNN2);            
+                DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "HV1 < HV2 : %d %d %d %d \r\n", SysMsg.AdjVol.R_VPP1, SysMsg.AdjVol.R_VNN1, SysMsg.AdjVol.R_VPP2, SysMsg.AdjVol.R_VNN2);            
                 SysMsg.AdjVol.VolMinitor = FALSE;
 //                Adjust_Voltage_Close();
             }
@@ -671,7 +671,7 @@ void App_AdjVol_Task()
                    SysMsg.AdjVol.R_VPP2 >= SysMsg.AdjVol.MIN_VPP2 && SysMsg.AdjVol.R_VPP2 <= SysMsg.AdjVol.MAX_VPP2 &&
                    SysMsg.AdjVol.R_VNN2 >= SysMsg.AdjVol.MIN_VNN2 && SysMsg.AdjVol.R_VNN2 <= SysMsg.AdjVol.MAX_VNN2 )  
                 {
-                    DEBUG_PRINTF(1, "SysMsg.AdjVol.Time = %d, AdjVol Success : %d %d %d %d \r\n", SysMsg.AdjVol.Time, SysMsg.AdjVol.R_VPP1, SysMsg.AdjVol.R_VNN1, SysMsg.AdjVol.R_VPP2, SysMsg.AdjVol.R_VNN2);            
+                    DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "SysMsg.AdjVol.Time = %d, AdjVol Success : %d %d %d %d \r\n", SysMsg.AdjVol.Time, SysMsg.AdjVol.R_VPP1, SysMsg.AdjVol.R_VNN1, SysMsg.AdjVol.R_VPP2, SysMsg.AdjVol.R_VNN2);            
                     
                     SysMsg.AdjVol.AdjVolOpen = FALSE;                                           //单次调压结束
                     SysMsg.AdjVol.MinAdjVolOpen = TRUE;                                         //微调开启
@@ -681,7 +681,7 @@ void App_AdjVol_Task()
             }
             else
             {
-                DEBUG_PRINTF(1, "SysMsg.AdjVol.Time = %d, AdjVol Timeout : %d %d %d %d \r\n", SysMsg.AdjVol.Time, SysMsg.AdjVol.R_VPP1, SysMsg.AdjVol.R_VNN1, SysMsg.AdjVol.R_VPP2, SysMsg.AdjVol.R_VNN2);            
+                DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "SysMsg.AdjVol.Time = %d, AdjVol Timeout : %d %d %d %d \r\n", SysMsg.AdjVol.Time, SysMsg.AdjVol.R_VPP1, SysMsg.AdjVol.R_VNN1, SysMsg.AdjVol.R_VPP2, SysMsg.AdjVol.R_VNN2);            
                                                
                 SysMsg.AdjVol.AdjVolOpen = FALSE;                                               //单次调压结束  
                 SysMsg.AdjVol.MinAdjVolOpen = TRUE;                                             //微调开启

@@ -1,7 +1,5 @@
 #include "usart.h"
 
-
-
 void Usart_Init(USART_TypeDef* USARTx, uint32_t Baud_Rate)
 {
     USART_InitTypeDef USART_InitStructure;
@@ -17,7 +15,7 @@ void Usart_Init(USART_TypeDef* USARTx, uint32_t Baud_Rate)
     else if(USARTx == UART5)
             RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5, ENABLE);
     
-    USART_InitStructure.USART_BaudRate = Baud_Rate;
+    USART_InitStructure.USART_BaudRate = 115200;
     USART_InitStructure.USART_WordLength = USART_WordLength_8b;
     USART_InitStructure.USART_StopBits = USART_StopBits_1;
     USART_InitStructure.USART_Parity = USART_Parity_No;

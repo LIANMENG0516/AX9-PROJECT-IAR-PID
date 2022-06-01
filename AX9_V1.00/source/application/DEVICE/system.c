@@ -2,6 +2,8 @@
 
 System_MsgStruct SysMsg = {
   
+    .AdjVol.DebugMessage                = FALSE,
+    
     .AdjVol.HvFlag                      = FALSE,
     .AdjVol.CwFlag                      = FALSE,
     
@@ -83,15 +85,18 @@ System_MsgStruct SysMsg = {
     .AdjVol.R_D1V45                     = 0,
     .AdjVol.R_IADP                      = 0,
 
+    .Temperature.DebugMessage           = FALSE,
     .Temperature.FPGA                   = 0,
     .Temperature.MCU                    = 0,
     
+    .Fan.DebugMessage                   = FALSE,
     .Fan.Rpm1                           = 0,    
     .Fan.Rpm2                           = 0,
     .Fan.Rpm3                           = 0,
     .Fan.Rpm4                           = 0,
     .Fan.Rpm5                           = 0,
     
+    .Cmd.DebugMessage                   = FALSE,
     .Cmd.Timeout                        = FALSE,
     .Cmd.HV_Send                        = FALSE,
     .Cmd.CW_Send                        = FALSE,
@@ -105,6 +110,7 @@ System_MsgStruct SysMsg = {
     .Cmd.BoardInfo_Send                 = FALSE,
     .Cmd.Channel                        = USB_CHANNEL,
              
+    .PwrInfo.DebugMessage               = FALSE,
     .PwrInfo.Bat1_Insert                = FALSE,
     .PwrInfo.Bat2_Insert                = FALSE,
     .PwrInfo.Bat1_Power                 = 0,
@@ -115,6 +121,7 @@ System_MsgStruct SysMsg = {
     .PwrInfo.Bat2_State                 = BAT_STATE_ERROR,
     .PwrInfo.Ac_Insert                  = FALSE,
     
+    .DebugMessage                       = FALSE,
     .SystemState                        = SYSTEM_OFF,
     .KeyState                           = FALSE,
     .PowerOnReq                         = FALSE,
@@ -126,6 +133,7 @@ System_MsgStruct SysMsg = {
 
 void SystemStateInit()
 {
+    SysMsg.AdjVol.DebugMessage          = FALSE,
     SysMsg.AdjVol.HvFlag                = FALSE,
     SysMsg.AdjVol.CwFlag                = FALSE,
     
@@ -206,15 +214,18 @@ void SystemStateInit()
     SysMsg.AdjVol.R_D1V45               = 0;
     SysMsg.AdjVol.R_IADP                = 0;
 
+    SysMsg.Temperature.DebugMessage     = FALSE;
     SysMsg.Temperature.FPGA             = 0;
     SysMsg.Temperature.MCU              = 0;
     
+    SysMsg.Fan.DebugMessage             = FALSE;
     SysMsg.Fan.Rpm1                     = 0;    
     SysMsg.Fan.Rpm2                     = 0;
     SysMsg.Fan.Rpm3                     = 0;
     SysMsg.Fan.Rpm4                     = 0;
     SysMsg.Fan.Rpm5                     = 0;
     
+    SysMsg.Cmd.DebugMessage             = FALSE;
     SysMsg.Cmd.Timeout                  = FALSE;
     SysMsg.Cmd.HV_Send                  = FALSE;
     SysMsg.Cmd.CW_Send                  = FALSE;
@@ -227,7 +238,8 @@ void SystemStateInit()
     SysMsg.Cmd.WriteBoardOk_Send        = FALSE;
     SysMsg.Cmd.BoardInfo_Send           = FALSE;
     SysMsg.Cmd.Channel                  = USB_CHANNEL;
-         
+      
+    SysMsg.PwrInfo.DebugMessage         = FALSE; 
     SysMsg.PwrInfo.Ac_Insert            = FALSE;         
     SysMsg.PwrInfo.Bat1_Insert          = FALSE;
     SysMsg.PwrInfo.Bat2_Insert          = FALSE;
@@ -238,6 +250,7 @@ void SystemStateInit()
     SysMsg.PwrInfo.Bat1_State           = BAT_STATE_ERROR;
     SysMsg.PwrInfo.Bat2_State           = BAT_STATE_ERROR;
     
+    SysMsg.DebugMessage                 = FALSE;
     SysMsg.SystemState                  = SYSTEM_OFF;
     SysMsg.KeyState                     = FALSE;
     SysMsg.PowerOnReq                   = FALSE;

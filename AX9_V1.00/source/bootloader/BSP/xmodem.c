@@ -3,16 +3,16 @@
 #include "board.h"
 
 extern CDC_IF_Prop_TypeDef VCP_fops;
-extern uint8_t USB_Rx_Buffer[CDC_DATA_MAX_PACKET_SIZE]; 
 extern uint32_t receive_count;
+extern uint16_t Rx_Len;
+extern uint8_t Rx_Buf[1500];
 
+bool XmodemIapOk = FALSE;
 bool XmodemStart = FALSE;
 bool XmodemRxDat = FALSE;
 
 XmodemStruct Rx_BufStruct;
 
-uint8_t RxBuf[CDC_DATA_MAX_PACKET_SIZE];
-uint16_t RxLen = 0;
 uint32_t addroffset = 0;
 
 uint16_t calcrc(uint8_t *ptr, uint16_t count)  
@@ -109,40 +109,53 @@ void XmodemSend(uint8_t *pData, uint16_t Len)
     VCP_fops.pIf_DataTx(pData, Len);
 }
 
+
+uint8_t USB_Tx_Buffer[CDC_DATA_MAX_PACKET_SIZE];
 uint32_t kk = 0;
 
 void Xmodm_Updata()
 {
     uint8_t Data = 0;
     
-    if(VCP_CheckDataReceived() != 0)                                        //接收到了数据
+    if(VCP_CheckDataReceived() != 0)                                            //接收到了数据
     {
         ++kk;
         printf("kk = %d \r\n", kk);
-        
-        RxLen = receive_count;                                             //将接收的数据存入 Rx_Len
-        
-        for(uint16_t i=0; i<RxLen; i++)
+        for(uint16_t i=0; i<receive_count; i++)
         {
-            RxBuf[i] = USB_Rx_Buffer[i];
-            
-            printf("%02X ", RxBuf[i]);
+            printf("%02X ", Rx_Buf[i]);
         }
-        
         printf("\r\n");
         
-        receive_count = 0;
-        memset(USB_Rx_Buffer, 0, sizeof(USB_Rx_Buffer));
-       
-        XmodemStart = TRUE;
-        XmodemRxDat = TRUE;                                             
+        
+        if(Rx_Buf[0] == 0x68 && Rx_Buf[1] == 0x11 && Rx_Buf[2] == 04 && Rx_Buf[3] == 0x01 && Rx_Buf[4] == 0xC0 && Rx_Buf[5] == 0x16)
+        {
+            USB_Tx_Buffer[0] = 0x68;
+            USB_Tx_Buffer[1] = 0x11;
+            USB_Tx_Buffer[2] = 0x04;
+            USB_Tx_Buffer[3] = 0x01;
+            USB_Tx_Buffer[4] = 0xC4;
+            USB_Tx_Buffer[5] = 0x16;
+            VCP_fops.pIf_DataTx(USB_Tx_Buffer, 6);
+            XmodemIapOk = TRUE;
+        }
+        else
+        {
+            receive_count = 0;
+            XmodemStart = TRUE;
+            XmodemRxDat = TRUE;  
+        }                                         
     }
+    
+    
+    
+    static uint32_t startCnt = 0;
 
-    if(XmodemStart == FALSE)                                                    //通讯未开始
+    if(XmodemStart == FALSE && ++startCnt >=3000000)                            //通讯未开始, 约1秒钟执行一次
     {
+        startCnt = 0;
         Data = TRANSMIT;
-        XmodemSend(&Data, 1);                                                   //发送字符C
-        delay_ms(500);                                          
+        XmodemSend(&Data, 1);                                                   //发送字符C     
     }
     else
     {
@@ -150,34 +163,37 @@ void Xmodm_Updata()
         {
             XmodemRxDat = FALSE;
             
-            switch(ReceiveDataFrameAnalysis(RxBuf, RxLen))                      //解析数据
+            switch(ReceiveDataFrameAnalysis(Rx_Buf, Rx_Len))                    //解析数据
             {
                 case UPDAT_RUN:
-                                    Flash_Program(APPL_AREA_ADDR + addroffset, &Rx_BufStruct.Buf[0], RxLen - 5);
-                                    addroffset += (RxLen - 5);
+                                    Flash_Program(APPL_AREA_ADDR + addroffset, &Rx_BufStruct.Buf[0], Rx_Len - 5);
+                                    addroffset += (Rx_Len - 5);
                                     Data = ACK;
-                                    XmodemSend(&Data, 1);                        
+                                    XmodemSend(&Data, 1);  
+                                    Rx_Len = 0;
                                     break;
                 case UPDAT_ERR:
                                     Data = NAK;
                                     XmodemSend(&Data, 1);
+                                    Rx_Len = 0;
                                     break;
                 case UPDAT_END:
                                     Data = ACK;
-                                    XmodemSend(&Data, 1);     
+                                    XmodemSend(&Data, 1);   
+                                    Rx_Len = 0;
                                     break;
                 case UPDAT_FINISH:
-                                    USB_CTRL_EN(0); 
-                                    
-                                    XmodemStart = FALSE;
-                                    XmodemRxDat = FALSE;
-
                                     Data = ACK;
                                     XmodemSend(&Data, 1);
+                                    Rx_Len = 0;
 
                                     FLASH_Unlock();
                                     FLASH_EraseSector(FLASH_Sector_10, VoltageRange_3);
                                     FLASH_Lock();
+                           
+//                                    XmodemStart = FALSE;
+//                                    XmodemRxDat = FALSE;
+                                    
                                     break;
             }
         }

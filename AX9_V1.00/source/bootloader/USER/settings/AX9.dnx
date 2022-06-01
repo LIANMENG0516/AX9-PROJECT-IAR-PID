@@ -32,10 +32,10 @@
     </Simulator>
     <PlDriver>
         <FirstRun>0</FirstRun>
-        <MemConfigValue>D:\Program Files\IAR Systems\Embedded Workbench 9.0\arm\CONFIG\debugger\ST\STM32F407ZG.ddf</MemConfigValue>
+        <MemConfigValue>D:\Program Files\IAR Systems\Embedded Workbench 9.0\arm\CONFIG\debugger\ST\STM32F405ZG.ddf</MemConfigValue>
     </PlDriver>
     <DebugChecksum>
-        <Checksum>351967959</Checksum>
+        <Checksum>2479243356</Checksum>
     </DebugChecksum>
     <Exceptions>
         <StopOnUncaught>_ 0</StopOnUncaught>

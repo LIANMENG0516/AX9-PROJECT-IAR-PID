@@ -218,7 +218,7 @@ void App_SysOnOff_Task()
 
     while(1)
     {      
-        PowerOn_Sequence();
+        //PowerOn_Sequence();
         System_OnCtrl();
         System_OffCtrl();
       

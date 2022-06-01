@@ -47,8 +47,8 @@
 /** @defgroup USBD_DESC_Private_Defines
   * @{
   */
-#define USBD_VID                        0x0493
-#define USBD_PID                        0x5750
+#define USBD_VID                        0x0487
+#define USBD_PID                        0x5747
 
 /** @defgroup USB_String_Descriptors
   * @{

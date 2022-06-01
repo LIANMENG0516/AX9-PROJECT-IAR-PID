@@ -277,11 +277,59 @@
         <encoding>System</encoding>
     </override>
     <override>
+        <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\application\DEVICE\emc2305.c</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
         <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\application\DEVICE\power.c</path>
         <encoding>System</encoding>
     </override>
     <override>
         <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\application\DEVICE\system.h</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
+        <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\application1\APP\app_adjvol.c</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
+        <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\application1\APP\app_comdebug.c</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
+        <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\application1\APP\app_sysonoff.c</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
+        <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\application1\BSP\board.c</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
+        <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\application1\BSP\gpio.c</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
+        <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\application1\BSP\systick.c</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
+        <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\application1\BSP\usart.c</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
+        <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\application1\DEVICE\command_process.h</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
+        <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\application1\DEVICE\emc2305.c</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
+        <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\application1\DEVICE\system.h</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
+        <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\application1\DEVICE\tmp468.c</path>
         <encoding>System</encoding>
     </override>
 </userOverrides>

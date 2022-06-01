@@ -4,6 +4,10 @@ __ALIGN_BEGIN USB_OTG_CORE_HANDLE USB_OTG_dev __ALIGN_END;
 
 void PowerOn_Sequence()
 {
+    PWR_BTN_COM(0);
+    delay_ms(200);
+    PWR_BTN_COM(1);
+    
     PBUS_ON(1);
     PWR_CTL(1);
     delay_ms(10);
@@ -27,6 +31,8 @@ void PowerOn_Sequence()
     delay_ms(15);
     EN_FPGA_02(1);
     AFE_EN2(1);
+    delay_ms(20);
+    PWR_OK_COM(1);
 }
 
 void PowerDown_Sequence()
@@ -54,12 +60,13 @@ void PowerDown_Sequence()
     delay_ms(10);
     
     Reset_Cpu();
-
 }
 
 void Board_Bsp_Init()
 {
     Gpio_Config();
+    
+    PowerOn_Sequence();
     
     USBD_Init(&USB_OTG_dev, USB_OTG_FS_CORE_ID, &USR_desc, &USBD_CDC_cb, &USR_cb);
     USB_CTRL_EN(1);  
@@ -70,7 +77,7 @@ void Board_Bsp_Init()
     
     Usart_Init(DEBUG_COM, 115200);
     
-    PowerOn_Sequence();
+    
 }
 
 

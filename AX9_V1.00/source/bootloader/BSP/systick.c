@@ -18,7 +18,7 @@ void TimingDelay_Decrement()
 {
     if (TimingDelay != 0x00)
     { 
-            TimingDelay--;
+        TimingDelay--;
     }
 }
 

@@ -7,6 +7,7 @@
 #include "usart.h"
 #include "flash.h"
 #include "xmodem.h"
+#include "emc2305.h"
 #include "systick.h"
 
 #include "string.h"

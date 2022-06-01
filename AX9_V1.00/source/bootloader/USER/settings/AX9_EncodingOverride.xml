@@ -9,6 +9,18 @@
         <encoding>System</encoding>
     </override>
     <override>
+        <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\BSP\flash.c</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
+        <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\BSP\gpio.c</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
+        <path>C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\BSP\xmodem.c</path>
+        <encoding>System</encoding>
+    </override>
+    <override>
         <path>C:\Users\LIANMENG\Desktop\BOOT\BSP\flash.c</path>
         <encoding>System</encoding>
     </override>

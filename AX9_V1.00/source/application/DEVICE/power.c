@@ -21,26 +21,56 @@ uint8_t CheckBatteryState()
 void Battery_Power_Read()
 {
     uint8_t batState;
-    static bool bat1_Charging = FALSE, bat2_Charging = FALSE;
     static uint16_t bat1ChargeRecoverCnt = 0, bat2ChargeRecoverCnt = 0;
-    
+
     Power_Insert();
     Bat1_PowerRead();
     Bat2_PowerRead();
     batState = CheckBatteryState();
     
-    if(SysMsg.PwrInfo.Ac_Insert == TRUE)                                                    //AC在位
+    DEBUG_PRINTF(SysMsg.PwrInfo.DebugMessage, "SysMsg.PwrInfo.Bat1_Insert = %d \r\n", SysMsg.PwrInfo.Bat1_Insert);
+    DEBUG_PRINTF(SysMsg.PwrInfo.DebugMessage, "SysMsg.PwrInfo.Bat1_Power = %d \r\n", SysMsg.PwrInfo.Bat1_Power);
+    DEBUG_PRINTF(SysMsg.PwrInfo.DebugMessage, "SysMsg.PwrInfo.Bat1_Tempature = %d \r\n", SysMsg.PwrInfo.Bat1_Tempature);
+    DEBUG_PRINTF(SysMsg.PwrInfo.DebugMessage, "SysMsg.PwrInfo.Bat1_State = %d \r\n", SysMsg.PwrInfo.Bat1_State);
+    
+    DEBUG_PRINTF(SysMsg.PwrInfo.DebugMessage, "SysMsg.PwrInfo.Bat2_Insert = %d \r\n", SysMsg.PwrInfo.Bat2_Insert);
+    DEBUG_PRINTF(SysMsg.PwrInfo.DebugMessage, "SysMsg.PwrInfo.Bat2_Power = %d \r\n", SysMsg.PwrInfo.Bat2_Power);
+    DEBUG_PRINTF(SysMsg.PwrInfo.DebugMessage, "SysMsg.PwrInfo.Bat2_Tempature = %d \r\n", SysMsg.PwrInfo.Bat2_Tempature);
+    DEBUG_PRINTF(SysMsg.PwrInfo.DebugMessage, "SysMsg.PwrInfo.Bat2_State = %d \r\n", SysMsg.PwrInfo.Bat2_State);
+
+    if(SysMsg.PwrInfo.Bat1_Insert == FALSE)
     {
-        if(SysMsg.PwrInfo.Bat1_Insert == TRUE || SysMsg.PwrInfo.Bat2_Insert == TRUE)
+        SysMsg.PwrInfo.Bat1_Power = 0;
+        SysMsg.PwrInfo.Bat1_Tempature = 0;
+        SysMsg.PwrInfo.Bat1_State = BAT_STATE_ERROR;
+        bat1ChargeRecoverCnt = 0;
+        BAT1_C_SHIFT_EN(0);
+    }
+    
+    if(SysMsg.PwrInfo.Bat2_Insert == FALSE)
+    {
+        SysMsg.PwrInfo.Bat2_Power = 0;
+        SysMsg.PwrInfo.Bat2_Tempature = 0;
+        SysMsg.PwrInfo.Bat2_State = BAT_STATE_ERROR;
+        bat2ChargeRecoverCnt = 0;
+        BAT2_C_SHIFT_EN(0);
+    }
+    
+    if(SysMsg.PwrInfo.Ac_Insert == TRUE)
+    {
+        if(SysMsg.PwrInfo.Bat1_Insert == TRUE && SysMsg.PwrInfo.Bat2_Insert == TRUE)
         {
-            if(SysMsg.PwrInfo.Bat1_Insert == TRUE)
+            if(SysMsg.PwrInfo.Bat1_Power != 100 || SysMsg.PwrInfo.Bat1_State == BAT_STATE_CHARGE)           //电池1正在充电
             {
+                BAT2_C_SHIFT_EN(0);
+                
                 if(SysMsg.PwrInfo.Bat1_Power == 100)
                 {
                     if(batState == BAT_STATE_FULL || batState == BAT_STATE_ERROR)
                     {
+                        CHARGE_EN(0);
+                        CHARGE_CTL(0);
                         BAT1_C_SHIFT_EN(0);
-                        bat1_Charging = FALSE;
                         SysMsg.PwrInfo.Bat1_State = BAT_STATE_FULL;
                     }
                 }
@@ -48,38 +78,59 @@ void Battery_Power_Read()
                 {
                     if(++bat1ChargeRecoverCnt >= 100)
                     {
+                        CHARGE_EN(0);
+                        CHARGE_CTL(0);
                         BAT1_C_SHIFT_EN(0);
-                        bat1_Charging = FALSE;
                         SysMsg.PwrInfo.Bat1_State = BAT_STATE_ERROR;
                     }
                     else
                     {
+                        CHARGE_EN(1);
+                        if(SysMsg.SystemState == SYSTEM_ON)
+                        {
+                            CHARGE_CTL(0);
+                        }
+                        else
+                        {
+                            CHARGE_CTL(1);
+                        }
                         BAT1_C_SHIFT_EN(1);
-                        bat1_Charging = TRUE;
                         SysMsg.PwrInfo.Bat1_State = BAT_STATE_CHARGE;
                     }
                 }
                 else if(SysMsg.PwrInfo.Bat1_Power != 100 && batState == BAT_STATE_CHARGE)
                 {
+                    CHARGE_EN(1);
+                    if(SysMsg.SystemState == SYSTEM_ON)
+                    {
+                        CHARGE_CTL(0);
+                    }
+                    else
+                    {
+                        CHARGE_CTL(1);
+                    }
                     BAT1_C_SHIFT_EN(1);
-                    bat1_Charging = TRUE;
                     SysMsg.PwrInfo.Bat1_State = BAT_STATE_CHARGE;
                 }
                 else
                 {
+                    CHARGE_EN(0);
+                    CHARGE_CTL(0);
                     BAT1_C_SHIFT_EN(0);
-                    bat1_Charging = FALSE;
                     SysMsg.PwrInfo.Bat1_State = BAT_STATE_ERROR;
                 }
             }
             else
             {
+                BAT1_C_SHIFT_EN(0);                                                                         
+                
                 if(SysMsg.PwrInfo.Bat2_Power == 100)
                 {
                     if(batState == BAT_STATE_FULL || batState == BAT_STATE_ERROR)
                     {
+                        CHARGE_EN(0);
+                        CHARGE_CTL(0);
                         BAT2_C_SHIFT_EN(0);
-                        bat2_Charging = FALSE;
                         SysMsg.PwrInfo.Bat2_State = BAT_STATE_FULL;
                         bat2ChargeRecoverCnt = 0;
                     }
@@ -88,66 +139,174 @@ void Battery_Power_Read()
                 {
                     if(++bat2ChargeRecoverCnt >= 100)
                     {
+                        CHARGE_EN(0);
+                        CHARGE_CTL(0);
                         BAT2_C_SHIFT_EN(0);
-                        bat2_Charging = FALSE;
                         SysMsg.PwrInfo.Bat2_State = BAT_STATE_ERROR;
                     }
                     else
                     {
+                        CHARGE_EN(1);
+                        if(SysMsg.SystemState == SYSTEM_ON)
+                        {
+                            CHARGE_CTL(0);
+                        }
+                        else
+                        {
+                            CHARGE_CTL(1);
+                        }
                         BAT2_C_SHIFT_EN(1);
-                        bat2_Charging = TRUE;
                         SysMsg.PwrInfo.Bat2_State = BAT_STATE_CHARGE;
                     }
                 }
                 else if(SysMsg.PwrInfo.Bat2_Power != 100 && batState == BAT_STATE_CHARGE)
                 {
+                    CHARGE_EN(1);
+                    if(SysMsg.SystemState == SYSTEM_ON)
+                    {
+                        CHARGE_CTL(0);
+                    }
+                    else
+                    {
+                        CHARGE_CTL(1);
+                    }
                     BAT2_C_SHIFT_EN(1);
-                    bat2_Charging = TRUE;
                     SysMsg.PwrInfo.Bat2_State = BAT_STATE_CHARGE;
                     bat2ChargeRecoverCnt = 0;
                 }
                 else
                 {
+                    CHARGE_EN(0);
+                    CHARGE_CTL(0);
                     BAT2_C_SHIFT_EN(0);
-                    bat2_Charging = FALSE;
                     SysMsg.PwrInfo.Bat2_State = BAT_STATE_ERROR;
                     bat2ChargeRecoverCnt = 0;
                 }
             }
         }
-        else
+        else if(SysMsg.PwrInfo.Bat1_Insert == TRUE)
         {
-            bat1_Charging = FALSE;
-            bat2_Charging = FALSE;
-            SysMsg.PwrInfo.Bat1_State = BAT_STATE_ERROR;
-            SysMsg.PwrInfo.Bat2_State = BAT_STATE_ERROR;
-            bat1ChargeRecoverCnt = 0;
-            bat2ChargeRecoverCnt = 0;
-        }
-        
-        if(bat1_Charging == TRUE || bat2_Charging == TRUE)
-        {
-            if(bat1_Charging == TRUE && bat2_Charging == FALSE)
-            {
-                BAT1_C_SHIFT_EN(1);
-                BAT2_C_SHIFT_EN(0);
-            }
-            if(bat1_Charging == FALSE && bat2_Charging == TRUE)
-            {
-                BAT1_C_SHIFT_EN(0);
-                BAT2_C_SHIFT_EN(1);
-            }
+            BAT2_C_SHIFT_EN(0);
             
-            if(SysMsg.SystemState == SYSTEM_ON)
+            if(SysMsg.PwrInfo.Bat1_Power == 100)
             {
-                CHARGE_CTL(0);                      //关闭快充
+                if(batState == BAT_STATE_FULL || batState == BAT_STATE_ERROR)
+                {
+                    CHARGE_EN(0);
+                    CHARGE_CTL(0);
+                    BAT1_C_SHIFT_EN(0);
+                    SysMsg.PwrInfo.Bat1_State = BAT_STATE_FULL;
+                }
+            }
+            else if(SysMsg.PwrInfo.Bat1_Power != 100 && batState == BAT_STATE_ERROR)
+            {
+                if(++bat1ChargeRecoverCnt >= 100)
+                {
+                    CHARGE_EN(0);
+                    CHARGE_CTL(0);
+                    BAT1_C_SHIFT_EN(0);
+                    SysMsg.PwrInfo.Bat1_State = BAT_STATE_ERROR;
+                }
+                else
+                {
+                    CHARGE_EN(1);
+                    if(SysMsg.SystemState == SYSTEM_ON)
+                    {
+                        CHARGE_CTL(0);
+                    }
+                    else
+                    {
+                        CHARGE_CTL(1);
+                    }
+                    BAT1_C_SHIFT_EN(1);
+                    SysMsg.PwrInfo.Bat1_State = BAT_STATE_CHARGE;
+                }
+            }
+            else if(SysMsg.PwrInfo.Bat1_Power != 100 && batState == BAT_STATE_CHARGE)
+            {
+                CHARGE_EN(1);
+                if(SysMsg.SystemState == SYSTEM_ON)
+                {
+                    CHARGE_CTL(0);
+                }
+                else
+                {
+                    CHARGE_CTL(1);
+                }
+                BAT1_C_SHIFT_EN(1);
+                SysMsg.PwrInfo.Bat1_State = BAT_STATE_CHARGE;
             }
             else
             {
-                CHARGE_CTL(1);                      //打开快充
+                CHARGE_EN(0);
+                CHARGE_CTL(0);
+                BAT1_C_SHIFT_EN(0);
+                SysMsg.PwrInfo.Bat1_State = BAT_STATE_ERROR;
             }
-            
-            CHARGE_EN(1);                           //使能充电
+        
+        }
+        else if(SysMsg.PwrInfo.Bat2_Insert == TRUE)
+        {
+            BAT1_C_SHIFT_EN(0);                                                                         
+                
+            if(SysMsg.PwrInfo.Bat2_Power == 100)
+            {
+                if(batState == BAT_STATE_FULL || batState == BAT_STATE_ERROR)
+                {
+                    CHARGE_EN(0);
+                    CHARGE_CTL(0);
+                    BAT2_C_SHIFT_EN(0);
+                    SysMsg.PwrInfo.Bat2_State = BAT_STATE_FULL;
+                    bat2ChargeRecoverCnt = 0;
+                }
+            }
+            else if(SysMsg.PwrInfo.Bat2_Power != 100 && batState == BAT_STATE_ERROR)
+            {
+                if(++bat2ChargeRecoverCnt >= 100)
+                {
+                    CHARGE_EN(0);
+                    CHARGE_CTL(0);
+                    BAT2_C_SHIFT_EN(0);
+                    SysMsg.PwrInfo.Bat2_State = BAT_STATE_ERROR;
+                }
+                else
+                {
+                    CHARGE_EN(1);
+                    if(SysMsg.SystemState == SYSTEM_ON)
+                    {
+                        CHARGE_CTL(0);
+                    }
+                    else
+                    {
+                        CHARGE_CTL(1);
+                    }
+                    BAT2_C_SHIFT_EN(1);
+                    SysMsg.PwrInfo.Bat2_State = BAT_STATE_CHARGE;
+                }
+            }
+            else if(SysMsg.PwrInfo.Bat2_Power != 100 && batState == BAT_STATE_CHARGE)
+            {
+                CHARGE_EN(1);
+                if(SysMsg.SystemState == SYSTEM_ON)
+                {
+                    CHARGE_CTL(0);
+                }
+                else
+                {
+                    CHARGE_CTL(1);
+                }
+                BAT2_C_SHIFT_EN(1);
+                SysMsg.PwrInfo.Bat2_State = BAT_STATE_CHARGE;
+                bat2ChargeRecoverCnt = 0;
+            }
+            else
+            {
+                CHARGE_EN(0);
+                CHARGE_CTL(0);
+                BAT2_C_SHIFT_EN(0);
+                SysMsg.PwrInfo.Bat2_State = BAT_STATE_ERROR;
+                bat2ChargeRecoverCnt = 0;
+            }
         }
         else
         {
@@ -155,7 +314,7 @@ void Battery_Power_Read()
             BAT2_C_SHIFT_EN(0);
             CHARGE_CTL(0);
             CHARGE_EN(0);
-        }  
+        }
     }
     else
     {
@@ -163,24 +322,12 @@ void Battery_Power_Read()
         SysMsg.PwrInfo.Bat2_State = BAT_STATE_ERROR;
         bat1ChargeRecoverCnt = 0;
         bat2ChargeRecoverCnt = 0;
-        bat1_Charging = FALSE;
-        bat2_Charging = FALSE;
         BAT1_C_SHIFT_EN(0);
         BAT2_C_SHIFT_EN(0);
         CHARGE_CTL(0);
         CHARGE_EN(0);
-    }  
+    }
 }
-
-
-
-
-
-
-
-
-
-
 
 
 

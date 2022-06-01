@@ -27,19 +27,12 @@ void Flash_Program(uint32_t Address, uint8_t *Data, uint16_t DataLen)
         temp1 = *Data++;
         temp2 = *Data++;
         tempData = (temp2 << 8) + temp1;
-        
-//        if(tempData == 0x1A04)
-//        {
-//            tempData = 0xFF04;
-//        }
-//        
+
         if(tempData != 0x1A1A)
         {
             FLASH_ProgramHalfWord(Address, tempData);
         }
-        
 
-        
         Address += 2;
     }
     FLASH_Lock();

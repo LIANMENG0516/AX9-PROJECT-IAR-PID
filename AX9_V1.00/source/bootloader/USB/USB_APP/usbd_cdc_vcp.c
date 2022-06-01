@@ -143,9 +143,31 @@ static uint16_t VCP_DataTx(uint8_t *buf, uint32_t len)
   * @param  Len: Number of data received (in bytes)
   * @retval Result of the operation: USBD_OK if all operations are OK else VCP_FAIL
   */
+uint8_t Rx_Buf[1500];
+uint16_t Rx_Len = 0;
 static uint16_t VCP_DataRx(uint8_t * Buf, uint32_t Len)
 {	
-  receive_count = Len;
+  if(Len == 64)
+  {
+    for(int i=0; i<Len; i++)
+    {
+        Rx_Buf[Rx_Len] = Buf[i];
+        Rx_Len++;
+    }
+  }
+  if(Len < 64)
+  {
+    for(int i=0; i<Len; i++)
+    {
+        Rx_Buf[Rx_Len] = Buf[i];
+        Rx_Len++;
+    }
+  }
+  if(Len != 64)
+  {
+    receive_count = Rx_Len;
+  }
+
   return USBD_OK;
 }
 

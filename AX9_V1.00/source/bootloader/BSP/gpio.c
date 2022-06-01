@@ -16,10 +16,10 @@ void Gpio_Config()
 {	
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA | RCC_AHB1Periph_GPIOB | RCC_AHB1Periph_GPIOC | RCC_AHB1Periph_GPIOD | RCC_AHB1Periph_GPIOE | RCC_AHB1Periph_GPIOF | RCC_AHB1Periph_GPIOG, ENABLE);                                   
     
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);         //使能PWR时钟
-    PWR_BackupAccessCmd(ENABLE);                                //使能后备寄存器访问
-    RCC_LSEConfig(RCC_LSE_OFF);                                 //关闭外部低速外部时钟, 关闭后PC14 PC15才可以当普通IO用。
-    PWR_BackupAccessCmd(DISABLE);                               //禁止修改后备寄存器
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR, ENABLE);                         //使能PWR时钟
+    PWR_BackupAccessCmd(ENABLE);                                                //使能后备寄存器访问
+    RCC_LSEConfig(RCC_LSE_OFF);                                                 //关闭外部低速外部时钟, 关闭后PC14 PC15才可以当普通IO用。
+    PWR_BackupAccessCmd(DISABLE);                                               //禁止修改后备寄存器
 	
     //USART4_DEBUG_COM
     GPIO_PinAFConfig(DEBUG_COM_TX_PORT, GPIO_PinSource0, GPIO_AF_UART4);

@@ -116,6 +116,7 @@ void Fan_Config()
     Fan_Emc2305_Init();
 }
 
+//extern USB_OTG_CORE_HANDLE USB_OTG_dev;
 void Board_Bsp_Init()
 {
     NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x20000);
@@ -124,6 +125,9 @@ void Board_Bsp_Init()
     SysTick_Iint();
     Gpio_Config();
     
+    //USBD_Init(&USB_OTG_dev, USB_OTG_FS_CORE_ID, &USR_desc, &USBD_CDC_cb, &USR_cb);
+    //USB_CTRL_EN(1);
+
     #if USE_DEBUG
     Debug_Com_Config();                     //调试串口初始化
     #else

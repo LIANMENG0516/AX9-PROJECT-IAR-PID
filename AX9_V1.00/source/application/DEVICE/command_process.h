@@ -20,14 +20,13 @@ typedef struct
 #define APPL_AREA_ADDR 0x08020000                       //APP区划分为FALSH的5~9扇区共640K 
 #define SIGN_AREA_ADDR 0x080C0000                       //SIGN区为FLASH的10~11扇区共256K
 
-
 #define RESPONSE_OK                             1
 #define RESPONSE_FAIL                           0
 
 #define CMD_FIRMWARE_VERSION                    0x01
 #define CMD_COMPILE_INFO                        0x02
-#define CMD_RDHARDWARE_VERSION                  0x03
-#define CMD_WDHARDWARE_VERSION                  0x04
+#define CMD_RDHARDWARE_VERSION                  0x03            
+#define CMD_WDHARDWARE_VERSION                  0x04            
 #define CMD_SLEEP_EN                            0x05
 #define CMS_WEAK_UP                             0x06
 #define CMD_RESTART                             0x07
@@ -47,8 +46,10 @@ typedef struct
 
 #define CMD_EC_COMMUNICATE                      0xA0
 
-#define CMD_INVALID                             0xF0        //非法命令
-#define TIMEOUT                                 0xF1        //调压超时
+#define CMD_INVALID                             0xF0                            //非法命令
+#define TIMEOUT                                 0xF1                            //调压超时
+
+#define CMS_DEBUGSWITCH                         0xFF                            //调压信息输出开关
 
 #define SCB_AIRCR       (*(volatile unsigned long *)0xE000ED0C)                 //Reset control Address Register
 #define SCB_RESET_VALUE 0x05FA0004                                              //reset value ,write to SCB_AIRCR  can reset cpu
