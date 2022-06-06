@@ -36,13 +36,10 @@ void I2c_Emc_Start()
 {
     SMDAT_2305_OUT();
     SMCLK_2305_1();
-    delay_us_os(80);
     SMDAT_2305_1();
-    delay_us_os(80);
+    delay_us_os(5);
     SMDAT_2305_0();
-    delay_us_os(80);
     SMCLK_2305_0();
-    delay_us_os(80);
 }
 
 void I2c_Emc_Stop()
@@ -50,11 +47,9 @@ void I2c_Emc_Stop()
     SMDAT_2305_OUT();
     SMCLK_2305_0();
     SMDAT_2305_0();
-    delay_us_os(80);
+    delay_us_os(5);
     SMCLK_2305_1();
-    delay_us_os(80);
     SMDAT_2305_1();
-    delay_us_os(80);
 }
 
 void I2c_Emc_SendByte(uint8_t data)
@@ -65,17 +60,17 @@ void I2c_Emc_SendByte(uint8_t data)
     {
         if((mask&data) == 0)
         {
-                SMDAT_2305_0();
+            SMDAT_2305_0();
         }
         else
         {
-                SMDAT_2305_1();
+            SMDAT_2305_1();
         }
-        delay_us_os(80);
+        delay_us_os(5);
         SMCLK_2305_1();
-        delay_us_os(80);
+        delay_us_os(5);
         SMCLK_2305_0();
-        delay_us_os(80);
+        delay_us_os(5);
     }
 }
 
@@ -96,11 +91,11 @@ uint8_t I2c_Emc_ReadByte()
         {
                 data |= mask;
         }
-        delay_us_os(80);
+        delay_us_os(5);
         SMCLK_2305_1();
-        delay_us_os(80);
+        delay_us_os(5);
         SMCLK_2305_0();
-        delay_us_os(80);
+        delay_us_os(5);
     }
     return data;
 }
@@ -117,14 +112,14 @@ uint8_t I2c_Emc_WaitAck()
     {
         if(--startCnt == 0)
         {
-                return 1;
+            return 1;
         }
     }
     
     SMCLK_2305_1();
-    delay_us_os(80);    
+    delay_us_os(5);    
     SMCLK_2305_0();
-    delay_us_os(80);
+    delay_us_os(5);
     return 0;
 }
 
@@ -133,26 +128,26 @@ void I2c_Emc_SendAck()
     SMDAT_2305_OUT();
 
     SMCLK_2305_0();
-    delay_us_os(80);
+    delay_us_os(5);
     SMDAT_2305_0();
-    delay_us_os(80);
+    delay_us_os(5);
     SMCLK_2305_1();
-    delay_us_os(80);
+    delay_us_os(5);
     SMCLK_2305_0();
-    delay_us_os(80);
+    delay_us_os(5);
 }
 
 void I2c_Emc_SendNack()
 {
     SMDAT_2305_OUT();
     SMCLK_2305_0();
-    delay_us_os(80);
+    delay_us_os(5);
     SMDAT_2305_1();
-    delay_us_os(80);
+    delay_us_os(5);
     SMCLK_2305_1();
-    delay_us_os(80);
+    delay_us_os(5);
     SMCLK_2305_0();
-    delay_us_os(80);
+    delay_us_os(5);
 }
 
 uint8_t Emc2305_WriteByte(uint8_t id, uint8_t addr, uint8_t val)
@@ -224,6 +219,9 @@ uint8_t Emc2305_ReadByte(uint8_t id, uint8_t addr, uint8_t *buffer)
     *buffer = I2c_Emc_ReadByte();
     I2c_Emc_SendNack();
     I2c_Emc_Stop();
+    
+    delay_us_os(5);
+    
     return 0;
 }
 
@@ -311,7 +309,7 @@ void Fan_Emc2305_Control()
 void Fan_Speed_Read()
 {
     uint16_t Rpm1, Rpm2, Rpm3, Rpm4, Rpm5;
-    uint8_t Tach1[2], Tach2[2], Tach3[2], Tach4[2], Tach5[2];
+    uint8_t Tach1[2] = {0, 0}, Tach2[2] = {0, 0}, Tach3[2] = {0, 0}, Tach4[2] = {0, 0}, Tach5[2] = {0, 0};
     
     Emc2305_ReadData(EMC2305_10K_ADDR, FAN1_TACHREAD_HIGH, Tach1, 2);
     Emc2305_ReadData(EMC2305_10K_ADDR, FAN2_TACHREAD_HIGH, Tach2, 2);
@@ -330,6 +328,13 @@ void Fan_Speed_Read()
     SysMsg.Fan.Rpm3 = (Rpm3 > SPEED_ERROR) ? Rpm3 : 0;
     SysMsg.Fan.Rpm4 = (Rpm4 > SPEED_ERROR) ? Rpm4 : 0;
     SysMsg.Fan.Rpm5 = (Rpm5 > SPEED_ERROR) ? Rpm5 : 0;
+    
+    
+    DEBUG_PRINTF(SysMsg.Fan.DebugMessage, "SysMsg.Fan.Rpm1 = %d \r\n", SysMsg.Fan.Rpm1);
+    DEBUG_PRINTF(SysMsg.Fan.DebugMessage, "SysMsg.Fan.Rpm2 = %d \r\n", SysMsg.Fan.Rpm2);
+    DEBUG_PRINTF(SysMsg.Fan.DebugMessage, "SysMsg.Fan.Rpm3 = %d \r\n", SysMsg.Fan.Rpm3);
+    DEBUG_PRINTF(SysMsg.Fan.DebugMessage, "SysMsg.Fan.Rpm4 = %d \r\n", SysMsg.Fan.Rpm4);
+    DEBUG_PRINTF(SysMsg.Fan.DebugMessage, "SysMsg.Fan.Rpm5 = %d \r\n", SysMsg.Fan.Rpm5);
 }
 
 void Fan_Emc2305_Init()
