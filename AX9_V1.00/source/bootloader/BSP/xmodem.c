@@ -130,14 +130,19 @@ void Xmodm_Updata()
         
         if(Rx_Buf[0] == 0x68 && Rx_Buf[1] == 0x11 && Rx_Buf[2] == 04 && Rx_Buf[3] == 0x01 && Rx_Buf[4] == 0xC0 && Rx_Buf[5] == 0x16)
         {
-            USB_Tx_Buffer[0] = 0x68;
-            USB_Tx_Buffer[1] = 0x11;
-            USB_Tx_Buffer[2] = 0x04;
-            USB_Tx_Buffer[3] = 0x01;
-            USB_Tx_Buffer[4] = 0xC4;
-            USB_Tx_Buffer[5] = 0x16;
-            VCP_fops.pIf_DataTx(USB_Tx_Buffer, 6);
-            XmodemIapOk = TRUE;
+            if(XmodemIapOk == TRUE)
+            {
+                USB_Tx_Buffer[0] = 0x68;
+                USB_Tx_Buffer[1] = 0x11;
+                USB_Tx_Buffer[2] = 0x04;
+                USB_Tx_Buffer[3] = 0x01;
+                USB_Tx_Buffer[4] = 0xC4;
+                USB_Tx_Buffer[5] = 0x16;
+                VCP_fops.pIf_DataTx(USB_Tx_Buffer, 6);
+            }
+
+            Rx_Len = 0;
+            receive_count = 0;
         }
         else
         {
@@ -186,14 +191,12 @@ void Xmodm_Updata()
                                     Data = ACK;
                                     XmodemSend(&Data, 1);
                                     Rx_Len = 0;
+                                    
+                                    XmodemIapOk = TRUE;
 
                                     FLASH_Unlock();
                                     FLASH_EraseSector(FLASH_Sector_10, VoltageRange_3);
                                     FLASH_Lock();
-                           
-//                                    XmodemStart = FALSE;
-//                                    XmodemRxDat = FALSE;
-                                    
                                     break;
             }
         }

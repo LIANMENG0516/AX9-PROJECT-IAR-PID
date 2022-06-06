@@ -537,11 +537,12 @@ void Cmd_ReadTempeatureInfo()
 }
 
 void Cmd_WriteTempeatureInfo()
-{
+{ 
+    SysMsg.Temperature.FPGA = RcvFrameCmd.Data[0];
+  
     SenFrameCmd.Cid = CMD_WDTEMPEATURE_INFO;
-    SenFrameCmd.Len = 2;
-    SenFrameCmd.Data[0] = SysMsg.Temperature.MCU;
-    SenFrameCmd.Data[1] = SysMsg.Temperature.FPGA;
+    SenFrameCmd.Len = 1;
+    SenFrameCmd.Data[0] = 0x01;
 
     if(SysMsg.Cmd.Channel == ECCOM_CHANNEL)
     {

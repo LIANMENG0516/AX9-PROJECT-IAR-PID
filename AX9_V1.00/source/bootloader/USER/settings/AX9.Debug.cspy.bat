@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"D:\Program Files\IAR Systems\Embedded Workbench 9.0\common\bin\cspybat" -f "C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\USER\settings\AX9.Debug.general.xcl" --backend -f "C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\USER\settings\AX9.Debug.driver.xcl" 
+"D:\Program Files\IAR Systems\Embedded Workbench 9.0\common\bin\cspybat" -f "C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\USER\settings\AX9.Debug.general.xcl" --backend -f "C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\USER\settings\AX9.Debug.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"D:\Program Files\IAR Systems\Embedded Workbench 9.0\common\bin\cspybat" -f "C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\USER\settings\AX9.Debug.general.xcl" "--debug_file=%~1" --backend -f "C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader1\USER\settings\AX9.Debug.driver.xcl" 
+"D:\Program Files\IAR Systems\Embedded Workbench 9.0\common\bin\cspybat" -f "C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\USER\settings\AX9.Debug.general.xcl" "--debug_file=%~1" --backend -f "C:\Users\LIANMENG\Desktop\AX9-PROJECT-IAR-PID\AX9_V1.00\source\bootloader\USER\settings\AX9.Debug.driver.xcl" 
 
 @echo off 
 :end
