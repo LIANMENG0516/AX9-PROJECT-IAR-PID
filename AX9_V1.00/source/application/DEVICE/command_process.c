@@ -514,6 +514,12 @@ void Cmd_ReadTempeatureInfo()
     SenFrameCmd.Len = 2;
     SenFrameCmd.Data[0] = SysMsg.PwrInfo.Bat1_Tempature;
     SenFrameCmd.Data[1] = SysMsg.PwrInfo.Bat2_Tempature;
+    
+    if(SysMsg.PwrInfo.Bat1_Insert)      SenFrameCmd.Data[0] = 0x80 | SenFrameCmd.Data[0];
+    else                                SenFrameCmd.Data[0] = 0x7F & SenFrameCmd.Data[0];
+    
+    if(SysMsg.PwrInfo.Bat2_Insert)      SenFrameCmd.Data[1] = 0x80 | SenFrameCmd.Data[1];
+    else                                SenFrameCmd.Data[1] = 0x7F & SenFrameCmd.Data[1];
 
     if(SysMsg.Cmd.Channel == ECCOM_CHANNEL)
     {
