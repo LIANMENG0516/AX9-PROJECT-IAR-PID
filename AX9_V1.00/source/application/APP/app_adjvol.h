@@ -5,7 +5,7 @@
 
 
 #define RNAGE_MIN_VOL 10                //调压结果与调压目标的差值小于此值时不进行微调 0.1V
-#define SWITCH_ADJVOL_MODULE     0      //1：分步调压, 0：一次性调压
+#define SWITCH_ADJVOL_MODULE     1      //1：分步调压, 0：一次性调压
 #define MINICWVOL                0
 
 #define HV_CHANGE_UP_TIMEOUT   100

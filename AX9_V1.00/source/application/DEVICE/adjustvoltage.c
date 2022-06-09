@@ -46,7 +46,7 @@ uint16_t Ncw_Calculate_AdjVol(uint16_t T_Data)
 }
 
 void Adjust_Voltage_Vpp1(uint16_t T_Vpp1)
-{
+{                                                             
     SysMsg.AdjVol.P_McuDacHv1 = SysMsg.AdjVol.T_McuDacHv1 = Vpp_Calculate_AdjVol(T_Vpp1);                         //计算要调节到目标值时HVADJ1的值
     DAC_SetChannel1Data(DAC_Align_12b_R, SysMsg.AdjVol.T_McuDacHv1);                   //调节VPP1至目标值
     DAC_SoftwareTriggerCmd(DAC_Channel_1, ENABLE);                                   //软件触发DAC转换

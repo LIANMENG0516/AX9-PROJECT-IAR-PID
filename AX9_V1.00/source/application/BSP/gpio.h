@@ -261,6 +261,8 @@
 #define SYS_LED_PORT              GPIOE
 #define SYS_LED_PIN               GPIO_Pin_8
 #define SYS_LED(x)                x ? GPIO_SetBits(SYS_LED_PORT, SYS_LED_PIN) : GPIO_ResetBits(SYS_LED_PORT, SYS_LED_PIN)
+#define SYS_LED_BLINK()           GPIO_ToggleBits(SYS_LED_PORT, SYS_LED_PIN)
+
 
 //ACÔÚÎ»¼ì²âÒý½Å
 #define AC_OK_PORT                GPIOE

@@ -14,6 +14,19 @@ void App_Led_Task()
     while(1)
     {			
         MCU_LED_BLINK();
+        
+        if(SysMsg.SystemState == SYSTEM_ON)
+        {
+            SYS_LED(1);
+        }
+        if(SysMsg.SystemState == SYSTEM_OFF)
+        {
+            SYS_LED(0);
+        }
+        if(SysMsg.SystemState == SYSTEM_SLEEP)
+        {
+            SYS_LED_BLINK();
+        }
 
         OSTimeDlyHMSM(0, 0, 0, 500, OS_OPT_TIME_PERIODIC, &err);     
     }

@@ -121,7 +121,6 @@ void Pid_AdjVolHv(uint8_t *buffer)
 
 void Get_AdjHvMsg(uint8_t *buffer)
 {      
-    
     SysMsg.AdjVol.T_VPP1 = (buffer[0] << 8) | buffer[1];                                                    //获取目标电压
     SysMsg.AdjVol.T_VNN1 = (buffer[2] << 8) | buffer[3];
     SysMsg.AdjVol.T_VPP2 = (buffer[4] << 8) | buffer[5];
@@ -132,40 +131,16 @@ void Get_AdjHvMsg(uint8_t *buffer)
        SysMsg.AdjVol.T_VPP2 <= HIGHSET_HV2 && SysMsg.AdjVol.T_VPP2 >= LOOWSET_HV2 && 
        SysMsg.AdjVol.T_VNN2 <= HIGHSET_HV2 && SysMsg.AdjVol.T_VNN2 >= LOOWSET_HV2 )
     {
-      
-        if(SysMsg.AdjVol.T_VPP1 != SysMsg.AdjVol.Old_T_VPP1 || SysMsg.AdjVol.T_VNN1 != SysMsg.AdjVol.Old_T_VNN1)                //本次调压目标值与上次不同
-        {
-            SysMsg.AdjVol.HV1NeedChange = TRUE;                                                                                 //HV1需要调压
-        }
-        else
-        {
-            SysMsg.AdjVol.HV1NeedChange = FALSE;  
-        }
-        
-        if(SysMsg.AdjVol.T_VPP2 != SysMsg.AdjVol.Old_T_VPP2 || SysMsg.AdjVol.T_VNN2 != SysMsg.AdjVol.Old_T_VNN2)                //本次调压目标值与上次不同
-        {
-            SysMsg.AdjVol.HV2NeedChange = TRUE;                                                                                 //HV2需要调压
-        }
-        else
-        {
-            SysMsg.AdjVol.HV2NeedChange = FALSE;
-        }
-        
-        SysMsg.AdjVol.HV1NeedChange = TRUE;     //DEBUG
-        SysMsg.AdjVol.HV2NeedChange = TRUE;     //DEBUG
+        SysMsg.AdjVol.HV1NeedChange = TRUE;     
+        SysMsg.AdjVol.HV2NeedChange = TRUE;     
         
         if(SysMsg.AdjVol.HV1NeedChange == TRUE || SysMsg.AdjVol.HV2NeedChange == TRUE)
         {
-            if((SysMsg.AdjVol.T_VPP1 > SysMsg.AdjVol.Old_T_VPP1 && SysMsg.AdjVol.T_VNN1 > SysMsg.AdjVol.Old_T_VNN1) ||         //升降压判断           
-               (SysMsg.AdjVol.T_VPP2 > SysMsg.AdjVol.Old_T_VPP2 && SysMsg.AdjVol.T_VNN2 > SysMsg.AdjVol.Old_T_VNN2)  )
+            if((SysMsg.AdjVol.T_VPP1 >= SysMsg.AdjVol.Old_T_VPP1 && SysMsg.AdjVol.T_VNN1 >= SysMsg.AdjVol.Old_T_VNN1) ||        //升降压判断           
+               (SysMsg.AdjVol.T_VPP2 >= SysMsg.AdjVol.Old_T_VPP2 && SysMsg.AdjVol.T_VNN2 >= SysMsg.AdjVol.Old_T_VNN2)  )
             {
                 DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "Up Vol \r\n");            
                 SysMsg.AdjVol.TimeOut = HV_CHANGE_UP_TIMEOUT;                                                                    //本次调压为升压
-            }
-            else if((SysMsg.AdjVol.T_VPP1 == SysMsg.AdjVol.Old_T_VPP1 && SysMsg.AdjVol.T_VNN1 == SysMsg.AdjVol.Old_T_VNN1) ||         //升降压判断           
-                    (SysMsg.AdjVol.T_VPP2 == SysMsg.AdjVol.Old_T_VPP2 && SysMsg.AdjVol.T_VNN2 == SysMsg.AdjVol.Old_T_VNN2)  )
-            {
-                DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "Equal Vol \r\n");            
             }
             else
             {
@@ -182,13 +157,16 @@ void Get_AdjHvMsg(uint8_t *buffer)
         
             #if SWITCH_ADJVOL_MODULE
             
-            SysMsg.AdjVol.P_McuDacHv1 = SysMsg.AdjVol.T_McuDacHv1 = Vpp_Calculate_AdjVol(SysMsg.AdjVol.T_VPP1);                                              //计算要调节到目标电压时, 目标DAC的值
-            SysMsg.AdjVol.P_SpiDacHv1 = SysMsg.AdjVol.T_SpiDacHv1 = Vnn_Calculate_AdjVol(SysMsg.AdjVol.T_VNN1);
-            SysMsg.AdjVol.P_McuDacHv2 = SysMsg.AdjVol.T_McuDacHv2 = Vpp_Calculate_AdjVol(SysMsg.AdjVol.T_VPP2);                
-            SysMsg.AdjVol.P_SpiDacHv2 = SysMsg.AdjVol.T_SpiDacHv2 = Vnn_Calculate_AdjVol(SysMsg.AdjVol.T_VNN2);
+            CTL_VPP1_VNN1_EN(1);                                                                                                 //打开高压输出
+            CTL_VPP2_VNN2_EN(1);
+            
+            SysMsg.AdjVol.T_McuDacHv1 = Vpp_Calculate_AdjVol(SysMsg.AdjVol.T_VPP1);                  //计算要调节到目标电压时, 目标DAC的值
+            SysMsg.AdjVol.T_SpiDacHv1 = Vnn_Calculate_AdjVol(SysMsg.AdjVol.T_VNN1);
+            SysMsg.AdjVol.T_McuDacHv2 = Vpp_Calculate_AdjVol(SysMsg.AdjVol.T_VPP2);                
+            SysMsg.AdjVol.T_SpiDacHv2 = Vnn_Calculate_AdjVol(SysMsg.AdjVol.T_VNN2);
         
             DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "DacVol Target : %d %d %d %d \r\n", SysMsg.AdjVol.T_McuDacHv1, SysMsg.AdjVol.T_SpiDacHv1, SysMsg.AdjVol.T_McuDacHv2, SysMsg.AdjVol.T_SpiDacHv2); 
-        
+                    
             while(SysMsg.AdjVol.HV1NeedChange == TRUE || SysMsg.AdjVol.HV2NeedChange == TRUE)
             {
                 if(SysMsg.AdjVol.HV1NeedChange == TRUE)
@@ -224,14 +202,18 @@ void Get_AdjHvMsg(uint8_t *buffer)
                 }
                 
                 DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "DacVol Precent : %d %d %d %d \r\n", SysMsg.AdjVol.P_McuDacHv1, SysMsg.AdjVol.P_SpiDacHv1, SysMsg.AdjVol.P_McuDacHv2, SysMsg.AdjVol.P_SpiDacHv2);  
+
             }       
             
             #else
-            
+             
             Adjust_Voltage_HV();                                                //执行高压调压处理, 该调压处理为硬件一次性调压
             DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "DacVol Target : %d %d %d %d \r\n", SysMsg.AdjVol.T_McuDacHv1, SysMsg.AdjVol.T_SpiDacHv1, SysMsg.AdjVol.T_McuDacHv2, SysMsg.AdjVol.T_SpiDacHv2); 
 
             #endif
+            
+            DEBUG_PRINTF(SysMsg.AdjVol.DebugMessage, "SysMsg.AdjVol.Time = %d, AdjVol Timeout : %d %d %d %d \r\n", SysMsg.AdjVol.Time, SysMsg.AdjVol.R_VPP1, SysMsg.AdjVol.R_VNN1, SysMsg.AdjVol.R_VPP2, SysMsg.AdjVol.R_VNN2);            
+
         
             SysMsg.AdjVol.AdjVolOpen = TRUE;                                    //调压开启
             SysMsg.AdjVol.VolMinitor = FALSE;                                   //关闭监控
